@@ -1,9 +1,10 @@
 # models/user.py
 from datetime import datetime, timedelta
 from sqlalchemy import String, Integer, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .associations import user_role
 from passlib.context import CryptContext
-import jwt
+from jose import jwt
 from config.env import get_settings
 
 from .base import Base
@@ -20,6 +21,10 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    roles: Mapped[list["Role"]] = relationship(
+        "Role", secondary=user_role, back_populates="users"
+    )
 
     @property
     def password(self) -> str:

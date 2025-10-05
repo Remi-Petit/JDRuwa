@@ -21,7 +21,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from models.base import Base
-import models.user
+import models # From models/__init__.py to ensure models are registered
 target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:

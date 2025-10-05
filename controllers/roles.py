@@ -6,6 +6,7 @@ from models.role import Role
 from models.permission import Permission
 from schemas.roles import RoleCreate
 from typing import List
+from fastapi import HTTPException
 
 async def get_all_roles(db: AsyncSession) -> List[Role]:
     """Récupère tous les rôles avec leurs permissions."""
@@ -31,10 +32,24 @@ async def create_role(db: AsyncSession, role_data: RoleCreate) -> Role:
     return result.scalar_one()
 
 async def add_permission_to_role(db: AsyncSession, role_id: int, permission_id: int) -> Role:
-    role = await db.get(Role, role_id)
+    # Récupère le rôle avec ses permissions
+    result = await db.execute(
+        select(Role).options(selectinload(Role.permissions)).where(Role.id == role_id)
+    )
+    role = result.scalar_one_or_none()
     permission = await db.get(Permission, permission_id)
-    if not role or not permission:
-        raise ValueError("Rôle ou permission non trouvé")
+
+    if not role:
+        raise HTTPException(status_code=404, detail="Role not found")
+    if not permission:
+        raise HTTPException(status_code=404, detail="Permission not found")
+
+    # Vérifie si la permission est déjà associée au rôle
+    if permission in role.permissions:
+        return role
+
+    # Ajoute la permission au rôle
     role.permissions.append(permission)
     await db.commit()
+    await db.refresh(role)
     return role

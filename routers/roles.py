@@ -18,7 +18,9 @@ async def create_role_endpoint(role_data: RoleCreate, db: AsyncSession = Depends
     return await create_role(db, role_data)
 
 @router.post("/{role_id}/permissions/{permission_id}")
-async def add_permission_to_role_endpoint(
-    role_id: int, permission_id: int, db: AsyncSession = Depends(get_db)
+async def assign_permission_to_role(
+    role_id: int,
+    permission_id: int,
+    db: AsyncSession = Depends(get_db)
 ):
     return await add_permission_to_role(db, role_id, permission_id)

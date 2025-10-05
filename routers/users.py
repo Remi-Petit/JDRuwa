@@ -4,6 +4,7 @@ from config.auth import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.user import User
+from controllers.users import add_role_to_user
 from database.connect import get_db
 from typing import List
 from schemas.users import UserOut
@@ -25,3 +26,11 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db), current_use
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     return user
+
+@router.post("/{user_id}/roles/{role_id}", response_model=UserOut)
+async def assign_role_to_user(
+    user_id: int,
+    role_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    return await add_role_to_user(db, user_id, role_id)

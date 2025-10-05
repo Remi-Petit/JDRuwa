@@ -13,3 +13,12 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class LoginIn(BaseModel):
+    email: EmailStr
+    password: str
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"

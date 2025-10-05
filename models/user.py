@@ -1,10 +1,14 @@
 # models/user.py
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import String, Integer, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from passlib.context import CryptContext
+import jwt
+from config.env import get_settings
 
 from .base import Base
+
+settings = get_settings()
 
 _pwd_ctx = CryptContext(schemes=["argon2"], deprecated="auto")
 
@@ -29,3 +33,14 @@ class User(Base):
 
     def verify_password(self, raw: str) -> bool:
         return _pwd_ctx.verify(raw, self.password_hash)
+    
+    def generate_jwt(self) -> str:
+        """Génère un JWT pour cet utilisateur."""
+        expires = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        payload = {
+            "sub": str(self.id),
+            "email": self.email,
+            "username": self.username,
+            "exp": expires,
+        }
+        return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)

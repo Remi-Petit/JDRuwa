@@ -7,6 +7,10 @@ load_dotenv()
 
 class Settings:
     def __init__(self) -> None:
+        self.SECRET_KEY: str = "ta_cle_secrete_ici_change_la_en_production"
+        self.ALGORITHM: str = "HS256"
+        self.ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
         self.API_TITLE: str = os.getenv("API_TITLE", "DB Healthcheck API")
         self.API_VERSION: str = os.getenv("API_VERSION", "1.0.0")
         self.API_HOST: str = os.getenv("API_HOST", "0.0.0.0")

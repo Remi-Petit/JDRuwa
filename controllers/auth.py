@@ -27,3 +27,15 @@ async def register_user(*, db: AsyncSession, email: str, username: str, password
     await db.commit()
     await db.refresh(user)
     return user
+
+
+class UnauthorizedError(Exception):
+    pass
+
+async def authenticate_user(*, db: AsyncSession, email: str, password: str) -> User:
+    """Authentifie un utilisateur et retourne son instance si OK."""
+    res = await db.execute(select(User).where(User.email == email))
+    user = res.scalar_one_or_none()
+    if not user or not user.verify_password(password):
+        raise UnauthorizedError("Email ou mot de passe incorrect")
+    return user

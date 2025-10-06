@@ -31,6 +31,13 @@ class Settings:
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
+    
+    @property
+    def RELOAD_APP(self) -> str:
+        if self.ENVIRONMENT == "development":
+            return True
+        else:
+            return False
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

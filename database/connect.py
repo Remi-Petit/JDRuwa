@@ -1,4 +1,6 @@
 # database/connect.py
+from fastapi import HTTPException
+import asyncpg
 from typing import AsyncGenerator, Dict, Any
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy import text
@@ -26,8 +28,19 @@ AsyncSessionLocal = async_sessionmaker(
 
 # Dépendance FastAPI pour obtenir une session
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSessionLocal() as session:
-        yield session
+    try:
+        async with AsyncSessionLocal() as session:
+            yield session
+    except asyncpg.exceptions.ConnectionDoesNotExistError:
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection error. Please try again later."
+        )
+    except SQLAlchemyError:
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection error. Please try again later."
+        )
 
 # Healthcheck DB: SELECT 1 + métadonnées
 async def check_db() -> Dict[str, Any]:

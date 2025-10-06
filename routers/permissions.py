@@ -10,7 +10,6 @@ router = APIRouter(prefix="/permissions", tags=["permissions"])
 
 @router.get("", response_model=List[PermissionOut])
 async def list_permissions(db: AsyncSession = Depends(get_db)):
-    """Liste toutes les permissions."""
     return await get_all_permissions(db)
 
 @router.post("", response_model=PermissionOut)

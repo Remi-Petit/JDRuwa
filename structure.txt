@@ -1,0 +1,47 @@
+app/
+│
+├── core/                 # Configuration de base et constantes globales
+│   ├── config.py         # Variables d’environnement, settings (pydantic)
+│   ├── security.py       # Authentification / autorisation
+│   └── dependencies.py   # Dépendances communes (DB, Auth, etc.)
+│
+├── db/
+│   ├── base.py           # Base declarative SQLAlchemy
+│   ├── models/           # Modèles ORM
+│   │   ├── user.py
+│   │   ├── post.py
+│   │   └── __init__.py
+│   ├── repositories/     # Accès aux données (pattern repository)
+│   │   ├── user_repo.py
+│   │   ├── post_repo.py
+│   │   └── __init__.py
+│   └── init_db.py        # Création des tables / seed
+│
+├── graphql/
+│   ├── schema.py         # Schéma racine GraphQL (Query, Mutation)
+│   ├── types/            # Types GraphQL (UserType, PostType, etc.)
+│   ├── mutations/        # Mutations (createUser, updatePost, etc.)
+│   ├── queries/          # Queries (getUsers, getPosts, etc.)
+│   ├── loaders/          # DataLoaders pour optimiser les requêtes N+1
+│   └── resolvers/        # Logique des résolveurs
+│
+├── services/             # Logique métier indépendante de GraphQL
+│   ├── user_service.py
+│   ├── post_service.py
+│   └── __init__.py
+│
+├── main.py               # Point d’entrée FastAPI
+└── tests/                # Tests unitaires et d’intégration
+
+
+
+
+FastAPI pour la couche HTTP (performance et typage)
+
+Strawberry GraphQL pour un schéma typé Python natif
+
+SQLAlchemy 2.0 + AsyncSession pour la DB
+
+Pydantic pour les validations
+
+pytest + httpx pour les tests

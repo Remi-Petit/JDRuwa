@@ -1,4 +1,4 @@
 env
-database/postgresql/postgresql
+postgresql/postgresql/
 __pycache__/
 .env

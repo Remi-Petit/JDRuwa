@@ -5,7 +5,7 @@
 * poetry add ...
 
 # Pour installer les dépendances du projet avec Poetry
-* poetry install
+* poetry install --no-root
 
 # Lancement des tests
 * $env:PYTHONPATH = "."

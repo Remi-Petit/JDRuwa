@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.repositories.user_repo import UserRepository
-from app.core.validators import UserValidator, ValidationError
+from app.validations import UserValidator, ValidationError
 
 class UserService:
     @staticmethod

@@ -1,6 +1,6 @@
-from passlib.hash import argon2
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.repositories.user_repo import UserRepository
+from app.core.validators import UserValidator, ValidationError
 
 class UserService:
     @staticmethod
@@ -10,15 +10,24 @@ class UserService:
     @staticmethod
     async def create_user(db: AsyncSession, email: str, username: str, password: str):
         """
-        Crée un utilisateur avec mot de passe haché via Argon2
+        Crée un utilisateur avec validations de sécurité renforcées
+        Le hashage du mot de passe est maintenant géré automatiquement par le modèle User
         """
-        # Argon2 n'a pas de limite comme bcrypt
-        hashed = argon2.hash(password)
-        return await UserRepository.create(db, email, username, hashed)
-
-    @staticmethod
-    def verify_password(password: str, hashed: str) -> bool:
-        """
-        Vérifie un mot de passe contre son hash Argon2
-        """
-        return argon2.verify(password, hashed)
+        # Validation complète des données utilisateur
+        try:
+            UserValidator.validate_user_creation(email, username, password)
+        except ValidationError as e:
+            raise ValueError(str(e))
+        
+        # Vérification que l'email n'existe pas déjà
+        existing_email = await UserRepository.get_by_email(db, email)
+        if existing_email:
+            raise ValueError("Un utilisateur avec cet email existe déjà")
+        
+        # Vérification que le nom d'utilisateur n'existe pas déjà
+        existing_username = await UserRepository.get_by_username(db, username)
+        if existing_username:
+            raise ValueError("Ce nom d'utilisateur est déjà pris")
+        
+        # Création de l'utilisateur - le mot de passe sera hashé automatiquement
+        return await UserRepository.create(db, email, username, password)

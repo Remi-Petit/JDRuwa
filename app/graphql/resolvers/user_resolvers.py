@@ -26,7 +26,6 @@ class Mutation:
     ) -> UserType:
         db: AsyncSession = info.context["db"]
 
-        if len(password) < MIN_PASSWORD_LENGTH:
-            raise ValueError(f"Le mot de passe doit contenir au moins {MIN_PASSWORD_LENGTH} caractères")
-
+        # Les validations sont maintenant gérées dans UserService.create_user()
+        # Plus besoin de la validation basique MIN_PASSWORD_LENGTH ici
         return await UserService.create_user(db, email, username, password)

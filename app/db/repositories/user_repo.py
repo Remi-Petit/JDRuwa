@@ -9,13 +9,20 @@ class UserRepository:
         return result.scalars().all()
 
     @staticmethod
-    async def get_by_email(db: AsyncSession, email: str):
+    async def get_by_email(db: AsyncSession, email: str) -> User | None:
         result = await db.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def create(db: AsyncSession, email: str, username: str, hashed_password: str):
-        user = User(email=email, username=username, hashed_password=hashed_password)
+    async def get_by_username(db: AsyncSession, username: str) -> User | None:
+        result = await db.execute(select(User).where(User.username == username))
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def create(db: AsyncSession, email: str, username: str, password: str):
+        user = User(email=email, username=username)
+        # Le mot de passe sera hashé automatiquement par le hook SQLAlchemy
+        user.password = password
         db.add(user)
         await db.commit()
         await db.refresh(user)
@@ -25,11 +32,3 @@ class UserRepository:
     async def get_by_id(db: AsyncSession, user_id: int) -> User | None:
         result = await db.get(User, user_id)
         return result
-
-    @staticmethod
-    async def get_by_email(db: AsyncSession, email: str) -> User | None:
-        result = await db.execute(
-            "SELECT * FROM users WHERE email = :email",
-            {"email": email}
-        )
-        return result.scalar_one_or_none()

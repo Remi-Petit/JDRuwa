@@ -4,6 +4,9 @@
 # Pour installer des packages avec Poetry
 * poetry add ...
 
+# Pour installer les dépendances du projet avec Poetry
+* poetry install
+
 # Lancement des tests
 * $env:PYTHONPATH = "."
 * poetry run pytest -s

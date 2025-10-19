@@ -1,0 +1,4 @@
+env
+database/postgresql/postgresql
+__pycache__/
+.env

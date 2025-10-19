@@ -1,33 +1,36 @@
-# Initialiser un environnement virtuel python avec Poetry
-* poetry init
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-# Pour installer des packages avec Poetry
-* poetry add ...
+## Getting Started
 
-# Pour installer les dépendances du projet avec Poetry
-* poetry install --no-root
+First, run the development server:
 
-# Lancement des tests
-* $env:PYTHONPATH = "."
-* poetry run pytest -s
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-# Gestion de la base de données avec Alembic
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Gestion des migrations avec Alembic
-* poetry run alembic upgrade head           # Appliquer toutes les migrations
-* poetry run alembic revision --autogenerate -m "Description"  # Créer une nouvelle migration
-* poetry run alembic current                # Voir l'état actuel
-* poetry run alembic history                # Voir l'historique
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-# Lancer le serveur FastAPI
-* poetry run uvicorn main:app --host 0.0.0.0 --port 8200 --reload
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Documentation
-* Voir `ALEMBIC_GUIDE.md` pour un guide complet des migrations
+## Learn More
 
-## En cours...
-* ✅ Architecture en couches (Repository + Service + GraphQL)
-* ✅ Authentification JWT avec Argon2
-* ✅ Validations de sécurité renforcées
-* ✅ Hooks SQLAlchemy pour hashage automatique des mots de passe
-* ✅ Migrations Alembic configurées et testées
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
